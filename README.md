@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My AI Weather Reporter
 
-## Getting Started
+Un assistant météo conversationnel qui répond aux questions sur le temps actuel dans une ville. Demandez, par exemple, « What’s the weather in Lisbon? » : l’assistant recherche la ville, récupère les conditions météo et les résume avec un conseil vestimentaire.
 
-First, run the development server:
+## Fonctionnalités
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Conversation en langage naturel avec un assistant propulsé par Gemini.
+- Recherche d’une ville avec l’API de géocodage d’Open-Meteo.
+- Affichage de la température en Celsius et en Fahrenheit, de la température ressentie, de l’humidité, du vent et des conditions actuelles.
+- Réponses courtes et conseils pratiques adaptés à la météo.
+- États de chargement et messages d’erreur dans l’interface.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> L’application affiche actuellement son interface en anglais.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Prérequis
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js et npm.
+- Une clé API Google Gemini.
 
-## Learn More
+Les services d’Open-Meteo utilisés pour la géolocalisation et la météo ne nécessitent pas de clé API.
 
-To learn more about Next.js, take a look at the following resources:
+## Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Installez les dépendances :
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+2. Créez un fichier `.env.local` à la racine du projet et ajoutez votre clé Gemini :
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```env
+   GOOGLE_GENERATIVE_AI_API_KEY=votre_cle_api
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   Ne publiez pas cette clé et ne la placez pas dans le code côté navigateur.
+
+3. Lancez le serveur de développement :
+
+   ```bash
+   npm run dev
+   ```
+
+4. Ouvrez [http://localhost:3000](http://localhost:3000).
+
+## Utilisation
+
+Saisissez une question météo dans la zone de discussion, par exemple :
+
+- `What's the weather in Lisbon?`
+- `Do I need a jacket in Montreal today?`
+
+L’assistant peut rechercher la météo actuelle d’une ville. Il ne fournit pas de prévisions horaires ou sur plusieurs jours.
+
+## Commandes
+
+| Commande | Description |
+| --- | --- |
+| `npm run dev` | Démarre le serveur de développement Next.js. |
+| `npm run build` | Génère la version de production. |
+| `npm run start` | Démarre le serveur de production après le build. |
+| `npm run lint` | Exécute ESLint. |
+
+## Fonctionnement
+
+1. L’interface de discussion de [`app/page.tsx`](./app/page.tsx) transmet les messages à la route API.
+2. [`app/api/chat/route.ts`](./app/api/chat/route.ts) utilise le modèle `gemini-3.1-flash-lite` via l’AI SDK.
+3. Lorsque nécessaire, l’outil météo résout le nom de la ville avec le géocodeur Open-Meteo, puis demande les conditions actuelles à son API de prévision.
+4. Gemini formule une réponse concise à partir des données récupérées.
+
+Les réponses des services météo sont validées avec des schémas Zod. Les erreurs HTTP des services sont remontées par la route API.
+
+## Technologies
+
+- Next.js 16 et React 19
+- TypeScript
+- AI SDK avec Google Gemini
+- Tailwind CSS 4
+- Open-Meteo Geocoding API et Forecast API
+- Zod
