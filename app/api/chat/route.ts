@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     model: google('gemini-3.1-flash-lite'), // Updated to the stable default production model
     messages: await convertToModelMessages(messages),
     stopWhen: isStepCount(5),
-    system: `You are a helpful personal assistant agent. When a tool returns data, do not just repeat the raw numbers. Summarize it like a cheerful morning radio host, give a practical clothing recommendation based on the temperature, and keep it under 3 sentences.`,
+    system: `You are a helpful personal assistant agent. When a tool returns data, do not just repeat the raw numbers. Summarize it like a cheerful morning radio host, give a practical recommendations based on the stats returned, and keep it under 3 sentences.`,
 
     tools: {
       getWeather: {
